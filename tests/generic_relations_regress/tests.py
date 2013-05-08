@@ -4,7 +4,7 @@ from django.test import TestCase, skipIfDBFeature
 
 from .models import (Address, Place, Restaurant, Link, CharLink, TextLink,
     Person, Contact, Note, Organization, OddRelation1, OddRelation2, Company,
-    Developer, Team, Guild, Tag, Board)
+    Developer, Team, Guild, Tag, Board, HasLinkThing)
 
 
 class GenericRelationTests(TestCase):
@@ -135,3 +135,13 @@ class GenericRelationTests(TestCase):
         b1 = Board.objects.create(name='')
         tag = Tag(label='VP', content_object=b1)
         tag.save()
+
+    def test_abstract_reverse_join(self):
+        linked_thing = HasLinkThing.objects.create()
+        link = Link.objects.create(
+            content_object=linked_thing
+        )
+
+        self.assertQuerysetEqual(HasLinkThing.objects.filter(links=link), [
+            "<HasLinkThing: HasLinkThing object>",
+        ])

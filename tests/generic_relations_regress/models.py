@@ -6,7 +6,7 @@ from django.utils.encoding import python_2_unicode_compatible
 
 __all__ = ('Link', 'Place', 'Restaurant', 'Person', 'Address',
            'CharLink', 'TextLink', 'OddRelation1', 'OddRelation2',
-           'Contact', 'Organization', 'Note', 'Company')
+           'Contact', 'Organization', 'Note', 'Company', 'HasLinkThing')
 
 @python_2_unicode_compatible
 class Link(models.Model):
@@ -122,3 +122,13 @@ class Tag(models.Model):
 
 class Board(models.Model):
     name = models.CharField(primary_key=True, max_length=15)
+
+
+class HasLinks(models.Model):
+    links = generic.GenericRelation(Link)
+
+    class Meta:
+        abstract = True
+
+class HasLinkThing(HasLinks):
+    pass
